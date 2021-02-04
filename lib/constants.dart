@@ -53,7 +53,7 @@ const List<String> quotes = [
   'The one-week milestone is important not only for your health, but for your success rate in quitting '
   'smoking successfully long term. '
   'Smokers who successfully make it one week without '
-  'smoking are nine times as likely to successfully quit. '
+  'smoking are nine times as likely to successfully quit. ',
   //14days
   'Within two weeks of quitting smoking, you may start to notice you’re not only breathing easier. '
   'You’re also walking easier. This is thanks to improved circulation and oxygenation. '
@@ -62,7 +62,7 @@ const List<String> quotes = [
   //30days
   'In just one short month, you can experience many health changes related to stopping smoking. '
   'One is feeling a sense of heightened overall energy. You may also notice that many smoking-related symptoms have decreased, '
-  'such as sinus congestion and shortness of breath with exercise. '
+  'such as sinus congestion and shortness of breath with exercise. ',
   //default
   'Congrats! You are on a streak!'
 ];

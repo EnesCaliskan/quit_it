@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quit_it/balance_calculator.dart';
 import 'package:quit_it/constants.dart';
 import 'package:quit_it/main.dart';
 import 'package:quit_it/quote_sender.dart';
@@ -7,6 +8,7 @@ import 'package:quit_it/reusable_card.dart';
 import 'rounded_button.dart';
 import 'circular_progress_bar.dart';
 import 'quote_sender.dart';
+import 'preferences_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,20 +16,53 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  double balance = 0.0;
   int streak = 0;
   double progress = 0.0;
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: kButtonText(
-        text: 'Quit It!',
-        fontSize: 22.0,
-        color: Colors.black,
-      )),
+        title: kButtonText(
+          text: 'Quit It!',
+          fontSize: 22.0,
+          color: Colors.black,
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.account_circle_rounded,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Preferences()));
+          },
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                print('hello');
+              });
+            },
+            child: Container(
+              child: Row(
+                children: [
+                  kButtonText(
+                    text: pMoney.toString(),
+                    color: Colors.black,
+                    fontSize: 22.0,
+                  ),
+                  Icon(
+                    Icons.attach_money,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -45,7 +80,8 @@ class _HomePageState extends State<HomePage> {
                   Align(
                     alignment: Alignment.center,
                     child: kButtonText(
-                      text: streak.toString() + ' days',
+                      text:
+                          '${streak.toString()} ${streak == 0 || streak == 1 ? 'day' : 'days'}',
                       color: Colors.black,
                       fontSize: 72.0,
                     ),
@@ -65,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     padding: EdgeInsets.all(20.0),
                     child: kButtonText(
-                      text: 'Good day user ! , have you [redacted] today? ',
+                      text: 'Good day ${pName == ''? 'user':pName} ! , have you smoked today? ',
                       color: Colors.black,
                       fontSize: 22.0,
                     ),
@@ -81,11 +117,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                         color: kPastelGreen,
                         onPressed: () {
+                          BalanceCalculator blc = new BalanceCalculator();
                           QuoteSender quoteSender = new QuoteSender();
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return CustomDialog(
+                                  streakText:
+                                      '🔥 Keep it up! You are on fire! 🔥',
                                   data: quoteSender.getQuote(streak),
                                 );
                               });
@@ -107,6 +146,8 @@ class _HomePageState extends State<HomePage> {
                               context: context,
                               builder: (BuildContext context) {
                                 return CustomDialog(
+                                    streakText:
+                                        '😔 You have lost your progress 😔',
                                     data: 'Oh no :( Your streak has ended');
                               });
                           setState(() {
@@ -129,7 +170,8 @@ class _HomePageState extends State<HomePage> {
 
 class CustomDialog extends StatelessWidget {
   final String data;
-  CustomDialog({@required this.data});
+  final String streakText;
+  CustomDialog({@required this.data, @required this.streakText});
 
   @override
   Widget build(BuildContext context) {
@@ -140,26 +182,32 @@ class CustomDialog extends StatelessWidget {
       elevation: 6.0,
       backgroundColor: Colors.white,
       child: Expanded(
-
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                kButtonText(
+                  text: streakText,
+                  fontSize: 16.0,
+                  color: Colors.red,
+                ),
+                IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+              ],
             ),
             Padding(
               padding: EdgeInsets.all(15.0),
               child: kButtonText(
                 text: data,
                 color: Colors.black,
-                fontSize: 22.0,
+                fontSize: 18.0,
               ),
             ),
           ],
